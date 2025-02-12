@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 using namespace std;
 // Vincent's code
@@ -105,6 +106,119 @@ remove("data.txt");
 
 // Gody and barrack's Code
 
+class Member {
+    public:
+        string name, email, contact;
+        int id, age;
+    
+        // Function to take input for a new member
+        void inputMember() {
+            cout << "Enter Member ID: ";
+            cin >> id;
+            cin.ignore();
+            cout << "Enter Name: ";
+            getline(cin, name);
+            cout << "Enter Email: ";
+            getline(cin, email);
+            cout << "Enter Age: ";
+            cin >> age;
+            cin.ignore();
+            cout << "Enter Contact: ";
+            getline(cin, contact);
+        }
+    
+        // Function to display member details
+        void displayMember() {
+            cout << "ID: " << id << ", Name: " << name << ", Email: " << email
+                 << ", Age: " << age << ", Contact: " << contact << endl;
+        }
+    };
+    
+    // LibraryManagement class to handle member operations
+    class LibraryManagement {
+    private:
+        vector<Member> members;
+        const string filename = "members.txt";
+    
+    public:
+        // Function to add a new member
+        void addMember() {
+            Member m;
+            m.inputMember();
+            members.push_back(m);
+            saveToFile();
+            cout << "Member added successfully!\n";
+        }
+    
+        // Function to view all members
+        void viewMembers() {
+            loadFromFile();
+            if (members.empty()) {
+                cout << "No members found.\n";
+            } else {
+                for (auto &m : members) {
+                    m.displayMember();
+                }
+            }
+        }
+    
+        // Function to update an existing member
+        void updateMember(int id) {
+            loadFromFile();
+            for (auto &m : members) {
+                if (m.id == id) {
+                    cout << "Updating details for Member ID " << id << ":\n";
+                    m.inputMember();
+                    saveToFile();
+                    cout << "Member updated successfully!\n";
+                    return;
+                }
+            }
+            cout << "Member not found!\n";
+        }
+    
+        // Function to delete a member
+        void deleteMember(int id) {
+            loadFromFile();
+            for (auto it = members.begin(); it != members.end(); ++it) {
+                if (it->id == id) {
+                    members.erase(it);
+                    saveToFile();
+                    cout << "Member deleted successfully!\n";
+                    return;
+                }
+            }
+            cout << "Member not found!\n";
+        }
+    
+    private:
+        // Function to save members to file
+        void saveToFile() {
+            ofstream file(filename, ios::trunc);
+            for (auto &m : members) {
+                file << m.id << "," << m.name << "," << m.email << "," << m.age << "," << m.contact << "\n";
+            }
+            file.close();
+        }
+    
+        // Function to load members from file
+        void loadFromFile() {
+            members.clear();
+            ifstream file(filename);
+            Member m;
+            while (file >> m.id) {
+                file.ignore();
+                getline(file, m.name, ',');
+                getline(file, m.email, ',');
+                file >> m.age;
+                file.ignore();
+                getline(file, m.contact);
+                members.push_back(m);
+            }
+            file.close();
+        }
+    };
+
 // Adrian and Shylynn's code
 
 
@@ -114,6 +228,39 @@ operate_books obj;
     obj.add_new_book();  // Call the function without passing uninitialized variables
     obj.view_books(); //call the fuction view books
     obj.delete_record(); //call the delete record function 
+
+    // Continuation of Gody's and Barrack's code
+    LibraryManagement lm;
+    int choice, id;
+    do {
+        cout << "\nLibrary Member Management System\n";
+        cout << "1. Add Member\n2. View Members\n3. Update Member\n4. Delete Member\n5. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+        switch (choice) {
+            case 1:
+                lm.addMember();
+                break;
+            case 2:
+                lm.viewMembers();
+                break;
+            case 3:
+                cout << "Enter Member ID to update: ";
+                cin >> id;
+                lm.updateMember(id);
+                break;
+            case 4:
+                cout << "Enter Member ID to delete: ";
+                cin >> id;
+                lm.deleteMember(id);
+                break;
+            case 5:
+                cout << "Exiting...\n";
+                break;
+            default:
+                cout << "Invalid choice! Try again.\n";
+        }
+    } while (choice != 5);
 
     return 0;
 }
