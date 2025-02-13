@@ -1,229 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>
+#include <ctime>
+#include <sstream>
 
 using namespace std;
-// Vincent's code
-class BOOK {
-public:
-    void list();
-    string booktitle(int);
-
-protected:
-    void add_new_book(int, string, string, float, int, string);
-    void update_books(int, int, int);
-    int available(int);
-    void delete_record(int);
-
-private:
-    int ISBN, books;
-    string title, author;
-};
-
-class operate_books : public BOOK {
-public:
-    void add_new_book() {
-        int ISBN, year;
-        string title, author, status;
-        float price;
-
-        // Adding books to catalogue
-        cout << "ADD BOOKS TO CATALOGUE\n\n";
-
-        cout << "ISBN: ";
-        cin >> ISBN;
-        cin.ignore();  // Ignore newline character left by `cin`
-
-        cout << "Title of the book: ";
-        getline(cin, title);
-
-        cout << "Author of the Book: ";
-        getline(cin, author);
-
-        cout << "Price: ";
-        cin >> price;
-
-        cout << "Year of Publication: ";
-        cin >> year;
-        cin.ignore();  // Ignore newline after int input
-
-        cout << "Status of the Book (Available/Not Available): ";
-        getline(cin, status);
-
-        cout << "\nBook added successfully!\n";
-
-        // Saving to file
-        add_to_catalogue(ISBN, title, author, price, year, status);
-    }
-
-    int add_to_catalogue(int ISBN, string title, string author, float price, int year, string status) {
-        ofstream file("data.txt", ios::app);  // Open file in append mode
-
-        if (!file) {
-            cout << "Error opening file!\n";
-            return 0;
-        }
-
-        file << ISBN << ", " << title << ", " << author << ", " << price << ", " << year << ", " << status << endl;
-        file.close();
-
-       return 0;
-    }
-
-    void view_books() {
-        ifstream file("data.txt");
-        string line;
-        if (!file) {
-            cout << "Error: Could not open file!" << endl;
-            return;
-        }
-        while (getline(file, line)) {
-            cout << line << endl;
-        }
-        file.close();
-    }
-void update_books(int, int, int){
-    int add_to_catalogue(int ISBN, string title, string author, float price, int year, string status);
-    cout << "Book catalogue updated successfully!\n";
-}
-void delete_record(){
-string line, title;
-cout<<"Please enter the title or ISBN of the book you want to delete"<<endl;
-cin>>title;
-ifstream file;
-file.open("data.txt");
-while (getline(file, line)){
-    if (line !=title)
-    cout<<line<<endl;
-}
-cout<<"The book with the name "<<title<<" has been if it existed"<<endl;
-file.close();
-remove("data.txt");
-}
-};
-
-
-// Gody and barrack's Code
-
-class Member {
-    public:
-        string name, email, contact;
-        int id, age;
-    
-        // Function to take input for a new member
-        void inputMember() {
-            cout << "Enter Member ID: ";
-            cin >> id;
-            cin.ignore();
-            cout << "Enter Name: ";
-            getline(cin, name);
-            cout << "Enter Email: ";
-            getline(cin, email);
-            cout << "Enter Age: ";
-            cin >> age;
-            cin.ignore();
-            cout << "Enter Contact: ";
-            getline(cin, contact);
-        }
-    
-        // Function to display member details
-        void displayMember() {
-            cout << "ID: " << id << ", Name: " << name << ", Email: " << email
-                 << ", Age: " << age << ", Contact: " << contact << endl;
-        }
-    };
-    
-    // LibraryManagement class to handle member operations
-    class LibraryManagement {
-    private:
-        vector<Member> members;
-        const string filename = "members.txt";
-    
-    public:
-        // Function to add a new member
-        void addMember() {
-            Member m;
-            m.inputMember();
-            members.push_back(m);
-            saveToFile();
-            cout << "Member added successfully!\n";
-        }
-    
-        // Function to view all members
-        void viewMembers() {
-            loadFromFile();
-            if (members.empty()) {
-                cout << "No members found.\n";
-            } else {
-                for (auto &m : members) {
-                    m.displayMember();
-                }
-            }
-        }
-    
-        // Function to update an existing member
-        void updateMember(int id) {
-            loadFromFile();
-            for (auto &m : members) {
-                if (m.id == id) {
-                    cout << "Updating details for Member ID " << id << ":\n";
-                    m.inputMember();
-                    saveToFile();
-                    cout << "Member updated successfully!\n";
-                    return;
-                }
-            }
-            cout << "Member not found!\n";
-        }
-    
-        // Function to delete a member
-        void deleteMember(int id) {
-            loadFromFile();
-            for (auto it = members.begin(); it != members.end(); ++it) {
-                if (it->id == id) {
-                    members.erase(it);
-                    saveToFile();
-                    cout << "Member deleted successfully!\n";
-                    return;
-                }
-            }
-            cout << "Member not found!\n";
-        }
-    
-    private:
-        // Function to save members to file
-        void saveToFile() {
-            ofstream file(filename, ios::trunc);
-            for (auto &m : members) {
-                file << m.id << "," << m.name << "," << m.email << "," << m.age << "," << m.contact << "\n";
-            }
-            file.close();
-        }
-    
-        // Function to load members from file
-        void loadFromFile() {
-            members.clear();
-            ifstream file(filename);
-            Member m;
-            while (file >> m.id) {
-                file.ignore();
-                getline(file, m.name, ',');
-                getline(file, m.email, ',');
-                file >> m.age;
-                file.ignore();
-                getline(file, m.contact);
-                members.push_back(m);
-            }
-            file.close();
-        }
-    };
-
-// Adrian and Shylynn's code
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <ctime>
 
 // Abstract base class for library entities
 class LibraryEntity {
@@ -236,62 +17,76 @@ public:
 // Base class for people
 class Person : public LibraryEntity {
 protected:
-    std::string name;
-    std::string contactInfo;
+    string name;
+    string contactInfo;
 
 public:
-    Person(const std::string& n, const std::string& contact)
+    Person(const string& n, const string& contact)
         : name(n), contactInfo(contact) {}
 
+    string getName() const { return name; }
+    string getContact() const { return contactInfo; }
+
     virtual void displayDetails() const override {
-        std::cout << "Name: " << name << "\n"
-                 << "Contact: " << contactInfo << "\n";
+        cout << "Name: " << name << "\n"
+             << "Contact: " << contactInfo << "\n";
     }
 };
 
 // Upcoming Book class
 class UpcomingBook {
 private:
-    std::string title;
-    std::string author;
-    std::string releaseDate;
-    std::string description;
+    string title;
+    string author;
+    string releaseDate;
+    string description;
 
 public:
-    UpcomingBook(const std::string& t, const std::string& a,
-                 const std::string& date, const std::string& desc)
+    UpcomingBook(const string& t, const string& a,
+                 const string& date, const string& desc)
         : title(t), author(a), releaseDate(date), description(desc) {}
 
     void displayDetails() const {
-        std::cout << "Title: " << title << "\n"
-                 << "Author: " << author << "\n"
-                 << "Release Date: " << releaseDate << "\n"
-                 << "Description: " << description << "\n";
+        cout << "Title: " << title << "\n"
+             << "Author: " << author << "\n"
+             << "Release Date: " << releaseDate << "\n"
+             << "Description: " << description << "\n";
+    }
+
+    void saveToFile() const {
+        ofstream file("upcoming_books.dat", ios::app);
+        if (file.is_open()) {
+            file << title << "|" << author << "|"
+                 << releaseDate << "|" << description << endl;
+            file.close();
+        }
     }
 };
-
 // Book class with enhanced borrowing tracking
 class Book : public LibraryEntity {
 private:
-    std::string title;
-    std::string author;
-    std::string isbn;
+    string title;
+    string author;
+    string isbn;
     int year;
     bool isAvailable;
-    std::string currentBorrower;
+    string currentBorrower;
     time_t borrowDate;
     static const int MAX_BORROW_DAYS = 14; // 2 weeks default borrow period
 
 public:
     Book() : year(0), isAvailable(true), borrowDate(0) {}
 
-    Book(const std::string& t, const std::string& a, const std::string& i, int y)
+    Book(const string& t, const string& a, const string& i, int y)
         : title(t), author(a), isbn(i), year(y), isAvailable(true),
           currentBorrower(""), borrowDate(0) {}
 
-    std::string getISBN() const { return isbn; }
+    string getTitle() const { return title; }
+    string getAuthor() const { return author; }
+    string getISBN() const { return isbn; }
     bool getAvailability() const { return isAvailable; }
-    std::string getTitle() const { return title; }
+    string getCurrentBorrower() const { return currentBorrower; }
+    int getYear() const { return year; }
 
     void setBorrowDate() {
         borrowDate = time(0);
@@ -306,7 +101,7 @@ public:
         return (daysRemaining > 0) ? daysRemaining : 0;
     }
 
-    void setAvailability(bool status, const std::string& borrower = "") {
+    void setAvailability(bool status, const string& borrower = "") {
         isAvailable = status;
         currentBorrower = borrower;
         if (!status) {
@@ -315,76 +110,49 @@ public:
     }
 
     virtual void displayDetails() const override {
-        std::cout << "Title: " << title << "\n"
-                 << "Author: " << author << "\n"
-                 << "ISBN: " << isbn << "\n"
-                 << "Year: " << year << "\n"
-                 << "Status: " << (isAvailable ? "Available" : "Borrowed by " + currentBorrower);
+        cout << "Title: " << title << "\n"
+             << "Author: " << author << "\n"
+             << "ISBN: " << isbn << "\n"
+             << "Year: " << year << "\n"
+             << "Status: " << (isAvailable ? "Available" : "Borrowed by " + currentBorrower);
         if (!isAvailable) {
-            std::cout << " (Days remaining: " << getRemainingDays() << ")";
+            cout << " (Days remaining: " << getRemainingDays() << ")";
         }
-        std::cout << "\n";
+        cout << "\n";
     }
 
     virtual void saveToFile() const override {
-        std::ofstream file("books.txt", std::ios::app);
+        ofstream file("books.dat", ios::app);
         if (file.is_open()) {
-            file << title << "," << author << "," << isbn << ","
-                 << year << "," << isAvailable << "," << currentBorrower << "\n";
-            file.close();
-        }
-    }
-};
-// Librarian class with enhanced security
-class Librarian : public Person {
-private:
-    std::string username;
-    std::string password;
-
-public:
-    Librarian(const std::string& n, const std::string& contact,
-              const std::string& user, const std::string& pass)
-        : Person(n, contact), username(user), password(pass) {}
-
-    bool authenticate(const std::string& user, const std::string& pass) const {
-        return (username == user && password == pass);
-    }
-
-    virtual void displayDetails() const override {
-        Person::displayDetails();
-        std::cout << "Role: Librarian\n";
-    }
-
-    virtual void saveToFile() const override {
-        std::ofstream file("librarian.txt", std::ios::app);
-        if (file.is_open()) {
-            file << name << "," << contactInfo << "," << username << "\n";
+            file << title << "|" << author << "|" << isbn << "|"
+                 << year << "|" << isAvailable << "|" << currentBorrower << endl;
             file.close();
         }
     }
 };
 
-// Enhanced Member class with password protection and detailed borrowing info
+// Member class with enhanced features
 class Member : public Person {
 private:
-    std::string memberId;
-    std::string password;
+    string memberId;
+    string password;
     static const int MAX_BORROWED = 3;
     Book* borrowedBooks[MAX_BORROWED];
     int borrowedCount;
 
 public:
-    Member(const std::string& n, const std::string& id,
-           const std::string& contact, const std::string& pass)
+    Member(const string& n, const string& id,
+           const string& contact, const string& pass)
         : Person(n, contact), memberId(id), password(pass), borrowedCount(0) {
         for (int i = 0; i < MAX_BORROWED; i++) {
             borrowedBooks[i] = nullptr;
         }
     }
 
-    std::string getMemberId() const { return memberId; }
+    string getMemberId() const { return memberId; }
+    string getPassword() const { return password; }
 
-    bool authenticate(const std::string& id, const std::string& pass) const {
+    bool authenticate(const string& id, const string& pass) const {
         return (memberId == id && password == pass);
     }
 
@@ -416,51 +184,40 @@ public:
     }
 
     void displayBorrowingCapacity() const {
-        std::cout << "Borrowing Capacity:\n"
-                 << "Currently borrowed: " << borrowedCount << " books\n"
-                 << "Maximum allowed: " << MAX_BORROWED << " books\n"
-                 << "Remaining capacity: " << (MAX_BORROWED - borrowedCount) << " books\n";
+        cout << "Borrowing Capacity:\n"
+             << "Currently borrowed: " << borrowedCount << " books\n"
+             << "Maximum allowed: " << MAX_BORROWED << " books\n"
+             << "Remaining capacity: " << (MAX_BORROWED - borrowedCount) << " books\n";
     }
 
     void displayBorrowedBooks() const {
         if (borrowedCount == 0) {
-            std::cout << "No books currently borrowed.\n";
+            cout << "No books currently borrowed.\n";
             return;
         }
 
-        std::cout << "Currently Borrowed Books:\n";
+        cout << "Currently Borrowed Books:\n";
         for (int i = 0; i < borrowedCount; i++) {
-            std::cout << "\n=== Book " << (i + 1) << " ===\n";
+            cout << "\n=== Book " << (i + 1) << " ===\n";
             borrowedBooks[i]->displayDetails();
         }
     }
 
     virtual void displayDetails() const override {
         Person::displayDetails();
-        std::cout << "Member ID: " << memberId << "\n";
+        cout << "Member ID: " << memberId << "\n";
         displayBorrowingCapacity();
         displayBorrowedBooks();
     }
 
     virtual void saveToFile() const override {
-        std::ofstream file("members.txt", std::ios::app);
+        ofstream file("members.dat", ios::app);
         if (file.is_open()) {
-            file << name << "," << memberId << "," << contactInfo << "," << password << "\n";
+            file << name << "|" << memberId << "|" << contactInfo << "|" << password << endl;
             file.close();
         }
     }
 
-    // New method to check if a specific book is borrowed by this member
-    bool hasBorrowedBook(const std::string& isbn) const {
-        for (int i = 0; i < borrowedCount; i++) {
-            if (borrowedBooks[i]->getISBN() == isbn) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // New method to get fine amount (if any)
     double calculateFine() const {
         double totalFine = 0.0;
         const double FINE_PER_DAY = 1.0; // $1 per day
@@ -474,6 +231,36 @@ public:
         return totalFine;
     }
 };
+// Librarian class with enhanced security
+class Librarian : public Person {
+private:
+    string username;
+    string password;
+
+public:
+    Librarian(const string& n, const string& contact,
+              const string& user, const string& pass)
+        : Person(n, contact), username(user), password(pass) {}
+
+    bool authenticate(const string& user, const string& pass) const {
+        return (username == user && password == pass);
+    }
+
+    virtual void displayDetails() const override {
+        Person::displayDetails();
+        cout << "Role: Librarian\n";
+    }
+
+    virtual void saveToFile() const override {
+        ofstream file("librarian.dat", ios::app);
+        if (file.is_open()) {
+            file << name << "|" << contactInfo << "|" << username << endl;
+            file.close();
+        }
+    }
+};
+
+// Library Management System
 class LibrarySystem {
 private:
     static const int MAX_BOOKS = 1000;
@@ -489,18 +276,98 @@ private:
     int memberCount;
     int upcomingBookCount;
     bool isLibrarianAuthenticated;
-    std::string currentMemberId; // Track currently logged in member
+    string currentMemberId;
 
-    void logTransaction(const std::string& memberId, const std::string& isbn, bool isBorrowing) {
-        std::ofstream logFile("transactions.txt", std::ios::app);
+    void logTransaction(const string& memberId, const string& isbn, bool isBorrowing) {
+        ofstream logFile("transactions.dat", ios::app);
         if (logFile.is_open()) {
             time_t now = time(0);
             char* dt = ctime(&now);
             logFile << dt << "Member: " << memberId << " "
                    << (isBorrowing ? "borrowed" : "returned")
-                   << " book ISBN: " << isbn << "\n";
+                   << " book ISBN: " << isbn << endl;
             logFile.close();
         }
+    }
+
+    void saveAllBooks() {
+        ofstream file("books.dat", ios::trunc);
+        if (file.is_open()) {
+            for (int i = 0; i < bookCount; i++) {
+                file << books[i].getTitle() << "|"
+                     << books[i].getAuthor() << "|"
+                     << books[i].getISBN() << "|"
+                     << books[i].getYear() << "|"
+                     << books[i].getAvailability() << "|"
+                     << books[i].getCurrentBorrower() << endl;
+            }
+            file.close();
+        }
+    }
+
+    void loadBooksFromFile() {
+        ifstream file("books.dat");
+        string line;
+
+        while (getline(file, line) && bookCount < MAX_BOOKS) {
+            stringstream ss(line);
+            string title, author, isbn, borrower;
+            int year;
+            bool available;
+
+            getline(ss, title, '|');
+            getline(ss, author, '|');
+            getline(ss, isbn, '|');
+            ss >> year;
+            ss.ignore();
+            ss >> available;
+            ss.ignore();
+            getline(ss, borrower);
+
+            books[bookCount] = Book(title, author, isbn, year);
+            if (!available) {
+                books[bookCount].setAvailability(false, borrower);
+            }
+            bookCount++;
+        }
+        file.close();
+    }
+
+    void loadMembersFromFile() {
+        ifstream file("members.dat");
+        string line;
+
+        while (getline(file, line) && memberCount < MAX_MEMBERS) {
+            stringstream ss(line);
+            string name, id, contact, password;
+
+            getline(ss, name, '|');
+            getline(ss, id, '|');
+            getline(ss, contact, '|');
+            getline(ss, password);
+
+            members[memberCount++] = new Member(name, id, contact, password);
+        }
+        file.close();
+    }
+
+    void loadUpcomingBooksFromFile() {
+        ifstream file("upcoming_books.dat");
+        string line;
+
+        while (getline(file, line) && upcomingBookCount < MAX_UPCOMING_BOOKS) {
+            stringstream ss(line);
+            string title, author, releaseDate, description;
+
+            getline(ss, title, '|');
+            getline(ss, author, '|');
+            getline(ss, releaseDate, '|');
+            getline(ss, description);
+
+            upcomingBooks[upcomingBookCount++] =
+                new UpcomingBook(title, author, releaseDate, description);
+        }
+        file.close();
     }
 
 public:
@@ -513,6 +380,7 @@ public:
     }
 
     ~LibrarySystem() {
+        saveAllBooks();
         for (int i = 0; i < memberCount; i++) {
             delete members[i];
         }
@@ -521,14 +389,13 @@ public:
         }
         delete librarian;
     }
-
-    // Authentication methods
-    bool authenticateLibrarian(const std::string& username, const std::string& password) {
+        // Authentication methods
+    bool authenticateLibrarian(const string& username, const string& password) {
         isLibrarianAuthenticated = librarian->authenticate(username, password);
         return isLibrarianAuthenticated;
     }
 
-    bool authenticateMember(const std::string& id, const std::string& password) {
+    bool authenticateMember(const string& id, const string& password) {
         Member* member = findMember(id);
         if (member && member->authenticate(id, password)) {
             currentMemberId = id;
@@ -543,121 +410,149 @@ public:
     }
 
     // Librarian functions
-    void librarianAddBook(const std::string& title, const std::string& author,
-                         const std::string& isbn, int year) {
+    void librarianAddBook(const string& title, const string& author,
+                         const string& isbn, int year) {
         if (!isLibrarianAuthenticated) {
-            throw std::runtime_error("Authentication required!");
+            throw runtime_error("Authentication required!");
         }
         if (bookCount < MAX_BOOKS) {
             books[bookCount++] = Book(title, author, isbn, year);
             books[bookCount-1].saveToFile();
         } else {
-            throw std::runtime_error("Library is full!");
+            throw runtime_error("Library is full!");
         }
     }
 
-    void addUpcomingBook(const std::string& title, const std::string& author,
-                        const std::string& releaseDate, const std::string& description) {
+    void addUpcomingBook(const string& title, const string& author,
+                        const string& releaseDate, const string& description) {
         if (!isLibrarianAuthenticated) {
-            throw std::runtime_error("Authentication required!");
+            throw runtime_error("Authentication required!");
         }
         if (upcomingBookCount < MAX_UPCOMING_BOOKS) {
             upcomingBooks[upcomingBookCount++] =
                 new UpcomingBook(title, author, releaseDate, description);
+            upcomingBooks[upcomingBookCount-1]->saveToFile();
         } else {
-            throw std::runtime_error("Upcoming books list is full!");
+            throw runtime_error("Upcoming books list is full!");
         }
     }
 
-    bool librarianDeleteBook(const std::string& isbn) {
+    bool librarianDeleteBook(const string& isbn) {
         if (!isLibrarianAuthenticated) {
-            throw std::runtime_error("Authentication required!");
+            throw runtime_error("Authentication required!");
         }
         for (int i = 0; i < bookCount; i++) {
             if (books[i].getISBN() == isbn) {
-                // Check if book is currently borrowed
                 if (!books[i].getAvailability()) {
-                    throw std::runtime_error("Cannot delete borrowed book!");
+                    throw runtime_error("Cannot delete borrowed book!");
                 }
-                // Shift remaining books
                 for (int j = i; j < bookCount - 1; j++) {
                     books[j] = books[j + 1];
                 }
                 bookCount--;
+                saveAllBooks();
                 return true;
             }
         }
         return false;
     }
 
-    void librarianAddMember(const std::string& name, const std::string& id,
-                           const std::string& contact, const std::string& password) {
+    void librarianAddMember(const string& name, const string& id,
+                           const string& contact, const string& password) {
         if (!isLibrarianAuthenticated) {
-            throw std::runtime_error("Authentication required!");
+            throw runtime_error("Authentication required!");
         }
         if (memberCount < MAX_MEMBERS) {
             members[memberCount++] = new Member(name, id, contact, password);
             members[memberCount-1]->saveToFile();
         } else {
-            throw std::runtime_error("Maximum member limit reached!");
+            throw runtime_error("Maximum member limit reached!");
+        }
+    }
+
+    void librarianDisplayMembers() const {
+        if (!isLibrarianAuthenticated) {
+            throw runtime_error("Authentication required!");
+        }
+
+        if (memberCount == 0) {
+            cout << "No members registered.\n";
+            return;
+        }
+
+        cout << "\nTotal Members: " << memberCount << "\n";
+        cout << "===================\n";
+
+        for (int i = 0; i < memberCount; i++) {
+            cout << "\nMember " << (i + 1) << ":\n";
+            members[i]->displayDetails();
+
+            double fine = members[i]->calculateFine();
+            if (fine > 0) {
+                cout << "Outstanding fine: $" << fine << "\n";
+            }
+
+            cout << "-------------------\n";
         }
     }
 
     void generateBorrowingReport() const {
         if (!isLibrarianAuthenticated) {
-            throw std::runtime_error("Authentication required!");
+            throw runtime_error("Authentication required!");
         }
-        std::cout << "\n=== Library Status Report ===\n"
-                  << "Total Books: " << bookCount << "\n"
-                  << "Total Members: " << memberCount << "\n"
-                  << "Upcoming Books: " << upcomingBookCount << "\n\n"
-                  << "=== Currently Borrowed Books ===\n";
+        cout << "\n=== Library Status Report ===\n"
+             << "Total Books: " << bookCount << "\n"
+             << "Total Members: " << memberCount << "\n"
+             << "Upcoming Books: " << upcomingBookCount << "\n\n"
+             << "=== Currently Borrowed Books ===\n";
 
         int borrowedCount = 0;
         for (int i = 0; i < bookCount; i++) {
             if (!books[i].getAvailability()) {
                 books[i].displayDetails();
                 borrowedCount++;
-                std::cout << "------------------------\n";
+                cout << "------------------------\n";
             }
         }
-        std::cout << "Total Borrowed Books: " << borrowedCount << "\n";
+        cout << "Total Borrowed Books: " << borrowedCount << "\n";
     }
 
     // Member functions
-    bool borrowBook(const std::string& isbn) {
+    bool borrowBook(const string& isbn) {
         if (currentMemberId.empty()) {
-            throw std::runtime_error("Member authentication required!");
+            throw runtime_error("Member authentication required!");
         }
 
         Member* member = findMember(currentMemberId);
         Book* book = findBook(isbn);
 
         if (!member || !book) {
-            throw std::runtime_error("Member or book not found!");
+            throw runtime_error("Member or book not found!");
         }
 
         if (member->borrowBook(book)) {
             logTransaction(currentMemberId, isbn, true);
+            saveAllBooks();
             return true;
         }
         return false;
     }
 
-    bool returnBook(const std::string& isbn) {
+    bool returnBook(const string& isbn) {
         if (currentMemberId.empty()) {
-            throw std::runtime_error("Member authentication required!");
+            throw runtime_error("Member authentication required!");
         }
 
         Member* member = findMember(currentMemberId);
         Book* book = findBook(isbn);
 
         if (!member || !book) {
-            throw std::runtime_error("Member or book not found!");
+            throw runtime_error("Member or book not found!");
         }
 
         if (member->returnBook(book)) {
             logTransaction(currentMemberId, isbn, false);
+            saveAllBooks();
             return true;
         }
         return false;
@@ -665,39 +560,39 @@ public:
 
     // Display functions
     void displayAllBooks() const {
-        std::cout << "\n=== Available Books ===\n";
+        cout << "\n=== Available Books ===\n";
         for (int i = 0; i < bookCount; i++) {
             if (books[i].getAvailability()) {
                 books[i].displayDetails();
-                std::cout << "------------------------\n";
+                cout << "------------------------\n";
             }
         }
     }
 
     void displayUpcomingBooks() const {
-        std::cout << "\n=== Upcoming Books ===\n";
+        cout << "\n=== Upcoming Books ===\n";
         for (int i = 0; i < upcomingBookCount; i++) {
             upcomingBooks[i]->displayDetails();
-            std::cout << "------------------------\n";
+            cout << "------------------------\n";
         }
     }
 
     void displayMemberProfile() const {
         if (currentMemberId.empty()) {
-            throw std::runtime_error("Member authentication required!");
+            throw runtime_error("Member authentication required!");
         }
         Member* member = findMember(currentMemberId);
         if (member) {
             member->displayDetails();
             double fine = member->calculateFine();
             if (fine > 0) {
-                std::cout << "Outstanding fine: $" << fine << "\n";
+                cout << "Outstanding fine: $" << fine << "\n";
             }
         }
     }
 
     // Utility functions
-    Book* findBook(const std::string& isbn) {
+    Book* findBook(const string& isbn) {
         for (int i = 0; i < bookCount; i++) {
             if (books[i].getISBN() == isbn) {
                 return &books[i];
@@ -706,7 +601,7 @@ public:
         return nullptr;
     }
 
-    Member* findMember(const std::string& id) const {
+    Member* findMember(const string& id) const {
         for (int i = 0; i < memberCount; i++) {
             if (members[i]->getMemberId() == id) {
                 return members[i];
@@ -714,154 +609,108 @@ public:
         }
         return nullptr;
     }
-    // In the LibrarySystem class, add this public method:
-
-void librarianDisplayMembers() const {
-    if (!isLibrarianAuthenticated) {
-        throw std::runtime_error("Authentication required!");
-    }
-
-    if (memberCount == 0) {
-        std::cout << "No members registered.\n";
-        return;
-    }
-
-    std::cout << "\nTotal Members: " << memberCount << "\n";
-    std::cout << "===================\n";
-
-    for (int i = 0; i < memberCount; i++) {
-        std::cout << "\nMember " << (i + 1) << ":\n";
-        members[i]->displayDetails();
-
-        // Display fine information if any
-        double fine = members[i]->calculateFine();
-        if (fine > 0) {
-            std::cout << "Outstanding fine: $" << fine << "\n";
-        }
-
-        std::cout << "-------------------\n";
-    }
-}
-
-private:
-    void loadBooksFromFile() {
-        std::ifstream file("books.txt");
-        // Implementation of loading books from file
-    }
-
-    void loadMembersFromFile() {
-        std::ifstream file("members.txt");
-        // Implementation of loading members from file
-    }
-
-    void loadUpcomingBooksFromFile() {
-        std::ifstream file("upcoming_books.txt");
-        // Implementation of loading upcoming books from file
-    }
 };
 int main() {
     LibrarySystem library;
     int choice;
-    std::string title, author, isbn, name, id, contact, password, releaseDate, description;
+    string title, author, isbn, name, id, contact, password, releaseDate, description;
 
     while (true) {
         try {
-            std::cout << "\n=== Library Management System ===\n"
-                      << "1. Login as Librarian\n"
-                      << "2. Login as Member\n"
-                      << "3. View Available Books\n"
-                      << "4. View Upcoming Books\n"
-                      << "5. Exit\n"
-                      << "Enter your choice: ";
-            std::cin >> choice;
-            std::cin.ignore();
+            cout << "\n=== Library Management System ===\n"
+                 << "1. Login as Librarian\n"
+                 << "2. Login as Member\n"
+                 << "3. View Available Books\n"
+                 << "4. View Upcoming Books\n"
+                 << "5. Exit\n"
+                 << "Enter your choice: ";
+            cin >> choice;
+            cin.ignore();
 
             switch (choice) {
                 case 1: {
-                    std::string username, password;
-                    std::cout << "\n=== Librarian Login ===\n";
-                    std::cout << "Username: ";
-                    std::getline(std::cin, username);
-                    std::cout << "Password: ";
-                    std::getline(std::cin, password);
+                    cout << "\n=== Librarian Login ===\n";
+                    cout << "Username: ";
+                    getline(cin, name);
+                    cout << "Password: ";
+                    getline(cin, password);
 
-                    if (library.authenticateLibrarian(username, password)) {
-                        std::cout << "Login successful!\n";
+                    if (library.authenticateLibrarian(name, password)) {
+                        cout << "Login successful!\n";
 
                         while (true) {
-                            std::cout << "\n=== Librarian Menu ===\n"
-                                    << "1. Add Book\n"
-                                    << "2. Delete Book\n"
-                                    << "3. Add Member\n"
-                                    << "4. View All Members\n"
-                                    << "5. Add Upcoming Book\n"
-                                    << "6. Generate Borrowing Report\n"
-                                    << "7. Logout\n"
-                                    << "Enter choice: ";
+                            cout << "\n=== Librarian Menu ===\n"
+                                 << "1. Add Book\n"
+                                 << "2. Delete Book\n"
+                                 << "3. Add Member\n"
+                                 << "4. View All Members\n"
+                                 << "5. Add Upcoming Book\n"
+                                 << "6. Generate Borrowing Report\n"
+                                 << "7. Logout\n"
+                                 << "Enter choice: ";
                             int libChoice;
-                            std::cin >> libChoice;
-                            std::cin.ignore();
+                            cin >> libChoice;
+                            cin.ignore();
 
                             switch (libChoice) {
                                 case 1: {
-                                    std::cout << "\n=== Add New Book ===\n";
-                                    std::cout << "Enter title: ";
-                                    std::getline(std::cin, title);
-                                    std::cout << "Enter author: ";
-                                    std::getline(std::cin, author);
-                                    std::cout << "Enter ISBN: ";
-                                    std::getline(std::cin, isbn);
+                                    cout << "\n=== Add New Book ===\n";
+                                    cout << "Enter title: ";
+                                    getline(cin, title);
+                                    cout << "Enter author: ";
+                                    getline(cin, author);
+                                    cout << "Enter ISBN: ";
+                                    getline(cin, isbn);
                                     int year;
-                                    std::cout << "Enter publication year: ";
-                                    std::cin >> year;
+                                    cout << "Enter publication year: ";
+                                    cin >> year;
 
                                     library.librarianAddBook(title, author, isbn, year);
-                                    std::cout << "Book added successfully!\n";
+                                    cout << "Book added successfully!\n";
                                     break;
                                 }
                                 case 2: {
-                                    std::cout << "\n=== Delete Book ===\n";
-                                    std::cout << "Enter ISBN of book to delete: ";
-                                    std::getline(std::cin, isbn);
+                                    cout << "\n=== Delete Book ===\n";
+                                    cout << "Enter ISBN of book to delete: ";
+                                    getline(cin, isbn);
                                     if (library.librarianDeleteBook(isbn)) {
-                                        std::cout << "Book deleted successfully!\n";
+                                        cout << "Book deleted successfully!\n";
                                     } else {
-                                        std::cout << "Book not found!\n";
+                                        cout << "Book not found!\n";
                                     }
                                     break;
                                 }
                                 case 3: {
-                                    std::cout << "\n=== Add New Member ===\n";
-                                    std::cout << "Enter name: ";
-                                    std::getline(std::cin, name);
-                                    std::cout << "Enter member ID: ";
-                                    std::getline(std::cin, id);
-                                    std::cout << "Enter contact: ";
-                                    std::getline(std::cin, contact);
-                                    std::cout << "Enter password: ";
-                                    std::getline(std::cin, password);
+                                    cout << "\n=== Add New Member ===\n";
+                                    cout << "Enter name: ";
+                                    getline(cin, name);
+                                    cout << "Enter member ID: ";
+                                    getline(cin, id);
+                                    cout << "Enter contact: ";
+                                    getline(cin, contact);
+                                    cout << "Enter password: ";
+                                    getline(cin, password);
 
                                     library.librarianAddMember(name, id, contact, password);
-                                    std::cout << "Member added successfully!\n";
+                                    cout << "Member added successfully!\n";
                                     break;
                                 }
                                 case 4:
-                                    std::cout << "\n=== Member List ===\n";
                                     library.librarianDisplayMembers();
                                     break;
                                 case 5: {
-                                    std::cout << "\n=== Add Upcoming Book ===\n";
-                                    std::cout << "Enter title: ";
-                                    std::getline(std::cin, title);
-                                    std::cout << "Enter author: ";
-                                    std::getline(std::cin, author);
-                                    std::cout << "Enter release date: ";
-                                    std::getline(std::cin, releaseDate);
-                                    std::cout << "Enter description: ";
-                                    std::getline(std::cin, description);
+                                    cout << "\n=== Add Upcoming Book ===\n";
+                                    cout << "Enter title: ";
+                                    getline(cin, title);
+                                    cout << "Enter author: ";
+                                    getline(cin, author);
+                                    cout << "Enter release date: ";
+                                    getline(cin, releaseDate);
+                                    cout << "Enter description: ";
+                                    getline(cin, description);
 
                                     library.addUpcomingBook(title, author, releaseDate, description);
-                                    std::cout << "Upcoming book added successfully!\n";
+                                    cout << "Upcoming book added successfully!\n";
                                     break;
                                 }
                                 case 6:
@@ -869,39 +718,39 @@ int main() {
                                     break;
                                 case 7:
                                     library.logout();
-                                    std::cout << "Logged out successfully!\n";
+                                    cout << "Logged out successfully!\n";
                                     goto main_menu;
                                 default:
-                                    std::cout << "Invalid choice!\n";
+                                    cout << "Invalid choice!\n";
                             }
                         }
                     } else {
-                        std::cout << "Invalid credentials!\n";
+                        cout << "Invalid credentials!\n";
                     }
                     break;
                 }
                 case 2: {
-                    std::cout << "\n=== Member Login ===\n";
-                    std::cout << "Member ID: ";
-                    std::getline(std::cin, id);
-                    std::cout << "Password: ";
-                    std::getline(std::cin, password);
+                    cout << "\n=== Member Login ===\n";
+                    cout << "Member ID: ";
+                    getline(cin, id);
+                    cout << "Password: ";
+                    getline(cin, password);
 
                     if (library.authenticateMember(id, password)) {
-                        std::cout << "Login successful!\n";
+                        cout << "Login successful!\n";
 
                         while (true) {
-                            std::cout << "\n=== Member Menu ===\n"
-                                    << "1. View My Profile\n"
-                                    << "2. View Available Books\n"
-                                    << "3. View Upcoming Books\n"
-                                    << "4. Borrow Book\n"
-                                    << "5. Return Book\n"
-                                    << "6. Logout\n"
-                                    << "Enter choice: ";
+                            cout << "\n=== Member Menu ===\n"
+                                 << "1. View My Profile\n"
+                                 << "2. View Available Books\n"
+                                 << "3. View Upcoming Books\n"
+                                 << "4. Borrow Book\n"
+                                 << "5. Return Book\n"
+                                 << "6. Logout\n"
+                                 << "Enter choice: ";
                             int memChoice;
-                            std::cin >> memChoice;
-                            std::cin.ignore();
+                            cin >> memChoice;
+                            cin.ignore();
 
                             switch (memChoice) {
                                 case 1:
@@ -914,35 +763,35 @@ int main() {
                                     library.displayUpcomingBooks();
                                     break;
                                 case 4: {
-                                    std::cout << "Enter ISBN of book to borrow: ";
-                                    std::getline(std::cin, isbn);
+                                    cout << "Enter ISBN of book to borrow: ";
+                                    getline(cin, isbn);
                                     if (library.borrowBook(isbn)) {
-                                        std::cout << "Book borrowed successfully!\n";
+                                        cout << "Book borrowed successfully!\n";
                                     } else {
-                                        std::cout << "Unable to borrow book!\n";
+                                        cout << "Unable to borrow book!\n";
                                     }
                                     break;
                                 }
                                 case 5: {
-                                    std::cout << "Enter ISBN of book to return: ";
-                                    std::getline(std::cin, isbn);
+                                    cout << "Enter ISBN of book to return: ";
+                                    getline(cin, isbn);
                                     if (library.returnBook(isbn)) {
-                                        std::cout << "Book returned successfully!\n";
+                                        cout << "Book returned successfully!\n";
                                     } else {
-                                        std::cout << "Unable to return book!\n";
+                                        cout << "Unable to return book!\n";
                                     }
                                     break;
                                 }
                                 case 6:
                                     library.logout();
-                                    std::cout << "Logged out successfully!\n";
+                                    cout << "Logged out successfully!\n";
                                     goto main_menu;
                                 default:
-                                    std::cout << "Invalid choice!\n";
+                                    cout << "Invalid choice!\n";
                             }
                         }
                     } else {
-                        std::cout << "Invalid credentials!\n";
+                        cout << "Invalid credentials!\n";
                     }
                     break;
                 }
@@ -953,127 +802,16 @@ int main() {
                     library.displayUpcomingBooks();
                     break;
                 case 5:
-                    std::cout << "Thank you for using the Library Management System!\n";
+                    cout << "Thank you for using the Library Management System!\n";
                     return 0;
                 default:
-                    std::cout << "Invalid choice! Please try again.\n";
+                    cout << "Invalid choice! Please try again.\n";
             }
             main_menu:;
         }
-        catch (const std::exception& e) {
-            std::cout << "Error: " << e.what() << "\n";
+        catch (const exception& e) {
+            cout << "Error: " << e.what() << "\n";
         }
     }
     return 0;
-}
-int main() {
-operate_books obj;
-
-    obj.add_new_book();  // Call the function without passing uninitialized variables
-    obj.view_books(); //call the fuction view books
-    obj.delete_record(); //call the delete record function 
-
-    // Continuation of Gody's and Barrack's code
-    LibraryManagement lm;
-    int choice, id;
-    do {
-        cout << "\nLibrary Member Management System\n";
-        cout << "1. Add Member\n2. View Members\n3. Update Member\n4. Delete Member\n5. Exit\n";
-        cout << "Enter choice: ";
-        cin >> choice;
-        switch (choice) {
-            case 1:
-                lm.addMember();
-                break;
-            case 2:
-                lm.viewMembers();
-                break;
-            case 3:
-                cout << "Enter Member ID to update: ";
-                cin >> id;
-                lm.updateMember(id);
-                break;
-            case 4:
-                cout << "Enter Member ID to delete: ";
-                cin >> id;
-                lm.deleteMember(id);
-                break;
-            case 5:
-                cout << "Exiting...\n";
-                break;
-            default:
-                cout << "Invalid choice! Try again.\n";
-        }
-    } while (choice != 5);
-
-    //Librarian
-    int choice;
-    bool isLibrarian = false;  // Assume user is not librarian for this example, change as needed
-    bool loggedIn = false;
-
-    Librarian librarian;
-
-    while (!loggedIn) {
-        displayWelcomeMenu();
-        std::cin >> choice;
-
-        switch (choice) {
-            case 1: {
-                // Login as Librarian
-                std::cout << "Logged in as Librarian." << std::endl;
-                isLibrarian = true;
-                loggedIn = true;
-                break;
-            }
-            case 2: {
-                // Login as Member
-                std::cout << "Logged in as Member." << std::endl;
-                isLibrarian = false;
-                loggedIn = true;
-                break;
-            }
-            case 3: {
-                // Register Membership (Simple demonstration)
-                std::string name, memberId;
-                std::cout << "Enter your name: ";
-                std::cin.ignore();
-                std::getline(std::cin, name);
-                std::cout << "Enter your member ID: ";
-                std::getline(std::cin, memberId);
-                Member newMember(name, memberId);
-                std::cout << "Membership registered successfully!" << std::endl;
-                break;
-            }
-            case 4: {
-                // Search for books
-                std::map<std::string, Book*> books;
-                FileHandler::loadBooks(books);
-                std::string search;
-                std::cout << "Enter book title or ISBN to search: ";
-                std::cin.ignore();
-                std::getline(std::cin, search);
-
-                bool found = false;
-                for (const auto& pair : books) {
-                    if (pair.second->getTitle().find(search) != std::string::npos ||
-                        pair.second->getIsbn().find(search) != std::string::npos) {
-                        pair.second->displayDetails();
-                        found = true;
-                    }
-                }
-
-                if (!found) {
-                    std::cout << "No books found with the search term: " << search << std::endl;
-                }
-                break;
-            }
-            case 5: {
-                std::cout << "Exiting..." << std::endl;
-                return 0;
-            }
-            default:
-                std::cout << "Invalid option. Try again." << std::endl;
-        }
-    
-
 }
