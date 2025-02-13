@@ -94,12 +94,6 @@ public:
 
     int getRemainingDays() const {
         if (isAvailable) return 0;
-jhdefiufiuruhiuhfirehferhvieru
-euuiruebfhueribvuenvubenvf
-uefbvveufbvefubvuebve
-ubevuerbvrbvyebvuerbvuyuy
-kj vfnvifnvijfnvfijvnifvn
-jffdnjfnvjfdb dbv d
 
         time_t now = time(0);
         int daysPassed = static_cast<int>(difftime(now, borrowDate) / (60 * 60 * 24));
