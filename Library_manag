@@ -78,75 +78,95 @@ public:
         }
     }
 };
-//To be presented by Adrian
+// To be presented by Adrian
 // Book class with enhanced borrowing tracking
 class Book : public LibraryEntity {
 private:
-    string title;
-    string author;
-    string isbn;
-    int year;
-    bool isAvailable;
-    string currentBorrower;
-    time_t borrowDate;
-    static const int MAX_BORROW_DAYS = 14; // 2 weeks default borrow period
+    string title;            // Title of the book
+    string author;           // Author of the book
+    string isbn;             // ISBN (International Standard Book Number) of the book
+    int year;                // Year of publication
+    bool isAvailable;        // Availability status of the book (true if available, false if borrowed)
+    string currentBorrower;  // The name of the person currently borrowing the book (empty if available)
+    time_t borrowDate;       // The date the book was borrowed
+    static const int MAX_BORROW_DAYS = 14; // Default maximum borrow period (2 weeks)
 
 public:
+    // Default constructor initializing the book with default values
     Book() : year(0), isAvailable(true), borrowDate(0) {}
 
+    // Parameterized constructor to initialize a book with title, author, ISBN, and year
     Book(const string& t, const string& a, const string& i, int y)
         : title(t), author(a), isbn(i), year(y), isAvailable(true),
           currentBorrower(""), borrowDate(0) {}
 
+    // Getter function to retrieve the title of the book
     string getTitle() const { return title; }
+
+    // Getter function to retrieve the author of the book
     string getAuthor() const { return author; }
+
+    // Getter function to retrieve the ISBN of the book
     string getISBN() const { return isbn; }
+
+    // Getter function to check if the book is available (returns true or false)
     bool getAvailability() const { return isAvailable; }
+
+    // Getter function to retrieve the name of the current borrower (empty if no one has borrowed it)
     string getCurrentBorrower() const { return currentBorrower; }
+
+    // Getter function to retrieve the year the book was published
     int getYear() const { return year; }
 
+    // Function to set the borrow date to the current time (when the book is borrowed)
     void setBorrowDate() {
-        borrowDate = time(0);
+        borrowDate = time(0); // Sets the borrow date to the current time
     }
 
+    // Function to calculate the remaining days the book can be borrowed before it's overdue
     int getRemainingDays() const {
-        if (isAvailable) return 0;
+        if (isAvailable) return 0; // If the book is available, there's no borrowing period to track
 
-        time_t now = time(0);
-        int daysPassed = static_cast<int>(difftime(now, borrowDate) / (60 * 60 * 24));
-        int daysRemaining = MAX_BORROW_DAYS - daysPassed;
-        return (daysRemaining > 0) ? daysRemaining : 0;
+        time_t now = time(0); // Get the current time
+        int daysPassed = static_cast<int>(difftime(now, borrowDate) / (60 * 60 * 24)); // Calculate the number of days that have passed since the borrow date
+        int daysRemaining = MAX_BORROW_DAYS - daysPassed; // Calculate remaining days before the book is overdue
+        return (daysRemaining > 0) ? daysRemaining : 0; // If the book is overdue, return 0
     }
 
+    // Function to set the availability status of the book and update the borrower information
     void setAvailability(bool status, const string& borrower = "") {
-        isAvailable = status;
-        currentBorrower = borrower;
+        isAvailable = status; // Set availability to the given status (true for available, false for borrowed)
+        currentBorrower = borrower; // Set the name of the borrower if the book is borrowed
         if (!status) {
-            setBorrowDate();
+            setBorrowDate(); // If the book is borrowed, set the borrow date to the current time
         }
     }
 
+    // Virtual function to display the details of the book (override the base class virtual method)
     virtual void displayDetails() const override {
-        cout << "Title: " << title << "\n"
-             << "Author: " << author << "\n"
-             << "ISBN: " << isbn << "\n"
-             << "Year: " << year << "\n"
-             << "Status: " << (isAvailable ? "Available" : "Borrowed by " + currentBorrower);
+        cout << "Title: " << title << "\n"                // Display the title of the book
+             << "Author: " << author << "\n"              // Display the author of the book
+             << "ISBN: " << isbn << "\n"                  // Display the ISBN of the book
+             << "Year: " << year << "\n"                  // Display the publication year of the book
+             << "Status: " << (isAvailable ? "Available" : "Borrowed by " + currentBorrower); // Display availability status and the borrower's name if borrowed
         if (!isAvailable) {
-            cout << " (Days remaining: " << getRemainingDays() << ")";
+            cout << " (Days remaining: " << getRemainingDays() << ")"; // Display the number of days remaining if the book is borrowed
         }
-        cout << "\n";
+        cout << "\n"; // Newline at the end of book details
     }
 
+    // Virtual function to save the book details to a file
     virtual void saveToFile() const override {
-        ofstream file("books.dat", ios::app);
+        ofstream file("books.dat", ios::app); // Open the file "books.dat" in append mode
         if (file.is_open()) {
+            // Write the book's details to the file in a structured format (separated by '|')
             file << title << "|" << author << "|" << isbn << "|"
                  << year << "|" << isAvailable << "|" << currentBorrower << endl;
-            file.close();
+            file.close(); // Close the file after writing
         }
     }
 };
+
 //To be presented by Barry 
 // Member class with enhanced features
 class Member : public Person {
