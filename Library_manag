@@ -91,12 +91,7 @@ public:
     void setBorrowDate() {
         borrowDate = time(0);
     }
-erurfueribfurevhfdbjsbbvf
-bucuerbfuervnjfbvjfebvuebv
-udedbbvuubfvuyebvuevfv
-bhubefbvufuvryuvbv
-reneriuvuerbvrbviutbviub
-feknviruvnurivnibiurb
+
 
     int getRemainingDays() const {
         if (isAvailable) return 0;
