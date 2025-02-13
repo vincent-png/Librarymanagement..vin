@@ -1,3 +1,4 @@
+//To be presented by Adrian
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -32,7 +33,7 @@ public:
              << "Contact: " << contactInfo << "\n";
     }
 };
-
+//To be presented by Vincent 
 // Upcoming Book class
 class UpcomingBook {
 private:
@@ -62,6 +63,7 @@ public:
         }
     }
 };
+//To be presented by Adrian
 // Book class with enhanced borrowing tracking
 class Book : public LibraryEntity {
 private:
@@ -130,7 +132,7 @@ public:
         }
     }
 };
-
+//To be presented by Barry 
 // Member class with enhanced features
 class Member : public Person {
 private:
@@ -231,6 +233,7 @@ public:
         return totalFine;
     }
 };
+//To be presented by Vincent 
 // Librarian class with enhanced security
 class Librarian : public Person {
 private:
@@ -259,7 +262,7 @@ public:
         }
     }
 };
-
+//To be presented by Gody 
 // Library Management System
 class LibrarySystem {
 private:
@@ -408,6 +411,7 @@ public:
         isLibrarianAuthenticated = false;
         currentMemberId = "";
     }
+    //To be presented by Vincent
 
     // Librarian functions
     void librarianAddBook(const string& title, const string& author,
@@ -456,6 +460,7 @@ public:
         }
         return false;
     }
+    //To be presented by Gody
 
     void librarianAddMember(const string& name, const string& id,
                            const string& contact, const string& password) {
@@ -495,7 +500,7 @@ public:
             cout << "-------------------\n";
         }
     }
-
+//To be presented by Shylynn
     void generateBorrowingReport() const {
         if (!isLibrarianAuthenticated) {
             throw runtime_error("Authentication required!");
