@@ -1,4 +1,4 @@
-//To be presented by Adrian
+// To be presented by Adrian
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -8,30 +8,45 @@
 using namespace std;
 
 // Abstract base class for library entities
+// This class serves as a base class for all entities in the library system (like books, people, etc.)
+// It ensures that derived classes implement displayDetails() and saveToFile() methods.
 class LibraryEntity {
 public:
+    // Pure virtual function to display details of an entity
     virtual void displayDetails() const = 0;
+
+    // Pure virtual function to save an entity to a file
     virtual void saveToFile() const = 0;
+
+    // Virtual destructor
     virtual ~LibraryEntity() {}
 };
 
-// Base class for people
+// Base class for people in the library system (like members, librarians, etc.)
+// The Person class is a derived class of LibraryEntity, inheriting its characteristics and functionalities.
 class Person : public LibraryEntity {
 protected:
-    string name;
-    string contactInfo;
+    string name;           // Name of the person
+    string contactInfo;    // Contact information (like phone number or email)
 
 public:
+    // Constructor to initialize a Person object with their name and contact info
     Person(const string& n, const string& contact)
         : name(n), contactInfo(contact) {}
 
+    // Getter for the name of the person
     string getName() const { return name; }
+
+    // Getter for the contact information of the person
     string getContact() const { return contactInfo; }
 
+    // Overridden displayDetails function to print the name and contact info of the person
     virtual void displayDetails() const override {
-        cout << "Name: " << name << "\n"
-             << "Contact: " << contactInfo << "\n";
+        cout << "Name: " << name << "\n"      // Displays the name of the person
+             << "Contact: " << contactInfo << "\n"; // Displays the contact information
     }
+
+
 };
 //To be presented by Vincent 
 // Upcoming Book class
